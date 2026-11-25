@@ -5,3 +5,4 @@ export interface Resume {
   fileSize: number;
   uploadedAt: string;
 }
+
