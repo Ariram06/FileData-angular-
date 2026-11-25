@@ -1,0 +1,83 @@
+<main class="page">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">DOCUMENT WORKSPACE</p>
+      <h1>Resume Manager</h1>
+      <p class="subtitle">Upload, organize, download and update your resumes.</p>
+    </div>
+    <div class="count">
+      <span>{{ resumes.length }}</span>
+      <small>Saved resumes</small>
+    </div>
+  </header>
+
+  <section class="upload-card">
+    <div>
+      <h2>Upload a resume</h2>
+      <p>PDF or DOCX · Maximum file size: 10 MB</p>
+    </div>
+
+    <div class="upload-controls">
+      <label class="file-picker" for="resumeFile">
+        <span>Choose file</span>
+        <input
+          id="resumeFile"
+          type="file"
+          accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          (change)="onFileSelected($event)">
+      </label>
+      <span class="selected-file">{{ selectedFile?.name || 'No file selected' }}</span>
+      <button class="primary-button" type="button" (click)="uploadResume()">
+        Upload resume
+      </button>
+    </div>
+  </section>
+
+  @if (message) {
+    <div class="notice success">{{ message }}</div>
+  }
+  @if (errorMessage) {
+    <div class="notice error">{{ errorMessage }}</div>
+  }
+
+  <section class="list-section">
+    <div class="section-heading">
+      <div>
+        <h2>Your resumes</h2>
+        <p>All uploaded documents appear here.</p>
+      </div>
+      <button class="refresh-button" type="button" (click)="loadResumes()">Refresh</button>
+    </div>
+
+    @if (isLoading) {
+      <div class="empty-state">Loading resumes...</div>
+    } @else if (resumes.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">PDF</div>
+        <h3>No resumes yet</h3>
+        <p>Choose a PDF or DOCX file above to upload your first resume.</p>
+      </div>
+    } @else {
+      <div class="resume-list">
+        @for (resume of resumes; track resume.resumeId) {
+          <article class="resume-item">
+            <div class="file-icon">DOC</div>
+            <div class="resume-info">
+              <h3>{{ resume.fileName }}</h3>
+              <p>{{ formatSize(resume.fileSize) }} · Uploaded {{ resume.uploadedAt | date:'mediumDate' }}</p>
+            </div>
+            <div class="actions">
+              <button class="text-button" type="button" (click)="downloadResume(resume)">Download</button>
+              <label class="text-button replace-button">
+                Replace
+                <input type="file" accept=".pdf,.docx" (change)="chooseReplacement(resume.resumeId, $event)">
+              </label>
+              <button class="delete-button" type="button" (click)="deleteResume(resume)">Delete</button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+  <footer>Resume Manager · Your documents are stored by the backend application.</footer>
+</main>

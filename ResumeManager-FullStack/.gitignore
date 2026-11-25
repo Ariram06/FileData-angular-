@@ -1,0 +1,16 @@
+# .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Angular / Node
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+
+# Local uploads and local database files
+Backend/ResumeManager/wwwroot/uploads/resumes/*
+!Backend/ResumeManager/wwwroot/uploads/resumes/.gitkeep
